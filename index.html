@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>عرض تقديمي: تحليل البيانات</title>
+    <style>
+        :root {
+            --primary-dark: #2c3e50;
+            --primary-blue: #3498db;
+            --accent-purple: #9b59b6;
+            --accent-cyan: #1abc9c;
+            --white: #ecf0f1;
+            --text-dark: #2c3e50;
+            --light-gray: #f8f9fa;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+            background: var(--primary-dark);
+            color: var(--white);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* Presentation container */
+        .presentation {
+            width: 100vw;
+            height: 100vh;
+            direction: rtl;
+            position: relative;
+        }
+
+        /* Slides */
+        .slide {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            left: 0;
+            top: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+            opacity: 0;
+            transform: translateX(100%);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+            background-size: cover;
+            background-position: center;
+        }
+
+        .slide.active {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        /* Slide 1 - Cover */
+        .slide-1 {
+            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"><rect width="100" height="100" fill="%233498db"/><text x="50" y="50" font-family="Verdana" font-size="50" fill="white" text-anchor="middle">📊</text></svg>');
+            background-color: var(--primary-dark);
+        }
+
+        .slide-1 h1 {
+            font-size: 4rem;
+            font-weight: 900;
+            margin-bottom: 1rem;
+            text-shadow: 0 0 30px rgba(0,0,0,0.8);
+            background: linear-gradient(135deg, #ecf0f1, #bdc3c7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .slide-1 h2 {
+            font-size: 1.8rem;
+            margin-bottom: 2rem;
+            color: var(--accent-cyan);
+            text-shadow: 0 0 20px rgba(0,0,0,0.7);
+        }
+
+        .slide-1 .data-analysis {
+            font-size: 3rem;
+            margin: 2rem 0;
+            background: linear-gradient(135deg, #3498db, #9b59b6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Slide 2 - What is Data Analysis */
+        .slide-2 {
+            background: linear-gradient(135deg, rgba(44,62,80,0.8), rgba(44,62,80,0.9));
+        }
+
+        .slide-2 .definition {
+            font-size: 1.5rem;
+            max-width: 800px;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .slide-2 .key-points {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            width: 100%;
+            max-width: 900px;
+        }
+
+        .slide-2 .key-point {
+            background: rgba(52, 152, 219, 0.2);
+            padding: 1.5rem;
+            border-radius: 10px;
+            border-left: 4px solid var(--primary-blue);
+            transition: transform 0.3s ease;
+        }
+
+        .slide-2 .key-point:hover {
+            transform: translateY(-5px);
+        }
+
+        /* Slide 3 - Stages */
+        .slide-3 {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+        }
+
+        .slide-3 .stages-container {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 1.5rem;
+            width: 100%;
+            max-width: 1000px;
+            margin: 2rem 0;
+        }
+
+        .slide-3 .stage {
+            background: rgba(52, 152, 219, 0.2);
+            padding: 2rem;
+            border-radius: 15px;
+            text-align: center;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .slide-3 .stage:hover {
+            background: rgba(52, 152, 219, 0.4);
+            transform: translateY(-10px);
+        }
+
+        .slide-3 .stage-number {
+            font-size: 3rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .slide-3 .stage-name {
+            font-size: 1.2rem;
+            margin-top: 0.5rem;
+        }
+
+        /* Slide 4 - Types */
+        .slide-4 {
+            background: linear-gradient(135deg, #8e44ad 0%, #9b59b6 100%);
+        }
+
+        .slide-4 .types-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            width: 100%;
+            max-width: 1000px;
+            margin: 2rem 0;
+        }
+
+        .slide-4 .type-card {
+            background: rgba(255,255,255,0.1);
+            padding: 2rem;
+            border-radius: 15px;
+            text-align: center;
+            border: 1px solid rgba(255,255,255,0.2);
+            transition: all 0.3s ease;
+        }
+
+        .slide-4 .type-card:hover {
+            background: rgba(255,255,255,0.2);
+            transform: translateY(-5px);
+        }
+
+        .slide-4 .type-name {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .slide-4 .type-desc {
+            font-size: 1rem;
+            color: #bdc3c7;
+            margin-bottom: 1rem;
+        }
+
+        .slide-4 .type-example {
+            font-size: 0.9rem;
+            color: #ecf0f1;
+        }
+
+        /* Slide 5 - Tools */
+        .slide-5 {
+            background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+        }
+
+        .slide-5 .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            width: 100%;
+            max-width: 1000px;
+            margin: 2rem 0;
+        }
+
+        .slide-5 .tool-card {
+            background: rgba(255,255,255,0.1);
+            padding: 2rem;
+            border-radius: 15px;
+            text-align: center;
+            border: 1px solid rgba(255,255,255,0.2);
+            transition: all 0.3s ease;
+        }
+
+        .slide-5 .tool-card:hover {
+            background: rgba(255,255,255,0.2);
+            transform: translateY(-5px);
+        }
+
+        .slide-5 .tool-name {
+            font-size: 1.3rem;
+            font-weight: bold;
+            margin: 1rem 0;
+        }
+
+        .slide-5 .tool-desc {
+            font-size: 0.9rem;
+            color: #bdc3c7;
+            line-height: 1.5;
+        }
+
+        /* Slide 6 - Practical Example */
+        .slide-6 {
+            background: linear-gradient(135deg, #e74c3c 0%, #ecf0f1 100%);
+        }
+
+        .slide-6 .chart-container {
+            width: 100%;
+            max-width: 800px;
+            height: 400px;
+            position: relative;
+            margin: 2rem 0;
+        }
+
+        .slide-6 .monthly-sales {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 2rem 0;
+        }
+
+        .slide-6 .monthly-sales th,
+        .slide-6 .monthly-sales td {
+            padding: 0.8rem 1.2rem;
+            border: 1px solid #bdc3c7;
+            text-align: center;
+        }
+
+        .slide-6 .monthly-sales th {
+            background: #2c3e50;
+            color: #ecf0f1;
+        }
+
+        .slide-6 .monthly-sales td {
+            color: #2c3e50;
+        }
+
+        .slide-6 .sales-bar {
+            height: 30px;
+            background: #3498db;
+            border-radius: 5px;
+            position: relative;
+            overflow: hidden;
+            margin: 0.5rem 0;
+        }
+
+        .slide-6 .sales-bar .bar-label {
+            position: absolute;
+            left: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-weight: bold;
+            color: #2c3e50;
+        }
+
+        .slide-6 .sales-bar .bar-value {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: #2c3e50;
+            color: white;
+            padding: 0 5px;
+            border-radius: 3px;
+            font-size: 0.8rem;
+        }
+
+        .slide-6 .sales-bar.highlight {
+            background: #e74c3c;
+            animation: highlight 1s ease;
+        }
+
+        @keyframes highlight {
+            0% { box-shadow: 0 0 10px #e74c3c; }
+            50% { box-shadow: 0 0 30px #e74c3c; }
+            100% { box-shadow: 0 0 10px #e74c3c; }
+        }
+
+        .slide-6 .conclusion {
+            background: rgba(255,255,255,0.2);
+            padding: 2rem;
+            border-radius: 15px;
+            max-width: 800px;
+            text-align: center;
+            margin: 2rem 0;
+        }
+
+        /* Slide 7 - Conclusion */
+        .slide-7 {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+        }
+
+        .slide-7 .quote {
+            font-size: 2rem;
+            text-align: center;
+            margin: 2rem 0;
+            color: #ecf0f1;
+        }
+
+        .slide-7 .thank-you {
+            font-size: 3rem;
+            color: var(--primary-blue);
+            margin-top: 3rem;
+            text-shadow: 0 0 30px rgba(52, 152, 219, 0.5);
+        }
+
+        /* Navigation buttons */
+        .nav-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255,255,255,0.2);
+            border: none;
+            padding: 10px 20px;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            border-radius: 50%;
+            z-index: 100;
+            transition: all 0.3s ease;
+        }
+
+        .nav-btn:hover {
+            background: rgba(255,255,255,0.4);
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        .nav-btn.prev {
+            left: 30px;
+        }
+
+        .nav-btn.next {
+            right: 30px;
+        }
+
+        .nav-btn.fullscreen {
+            top: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--primary-blue);
+        }
+
+        /* Slide indicator */
+        .slide-indicator {
+            position: absolute;
+            bottom: 30px;
+            display: flex;
+            gap: 2rem;
+            justify-content: center;
+        }
+
+        .slide-indicator dot {
+            width: 12px;
+            height: 12px;
+            background: rgba(255,255,255,0.3);
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .slide-indicator dot.active {
+            background: var(--primary-blue);
+            width: 20px;
+        }
+
+        .slide-indicator dot:hover {
+            background: var(--white);
+            width: 16px;
+        }
+
+        /* Progress bar */
+        .progress-bar {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 3px;
+            background: var(--primary-blue);
+            width: 0%;
+            z-index: 50;
+            transition: width 0.5s ease;
+        }
+
+        /* Keyboard support */
+        .keyboard-hint {
+            position: absolute;
+            top: 30px;
+            right: 30px;
+            background: rgba(255,255,255,0.1);
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            color: #bdc3c7;
+        }
+    </style>
+</head>
+<body>
+    <div class="presentation" id="presentation">
+        <!-- Slide 1: Cover -->
+        <div class="slide slide-1" id="slide-1">
+            <h1>تحليل البيانات</h1>
+            <h2>من البيانات الخام إلى القرارات الذكية</h2>
+            <div class="data-analysis">DATA ANALYSIS</div>
+        </div>
+
+        <!-- Slide 2: What is Data Analysis? -->
+        <div class="slide slide-2" id="slide-2">
+            <div class="definition">تحليل البيانات هو عملية تفتيش وتنظيف وتحويل نموذج البيانات لاكتشاف المعلومات المفيدة، والاستخلاص والاستنتاجات-supporting القرار.</div>
+            <div class="key-points">
+                <div class="key-point">
+                    <strong>تحويل البيانات</strong><br>من الخام إلى المعلومات
+                </div>
+                <div class="key-point">
+                    <strong>دعم القرار</strong><br>باستخدام الرؤى المستندة للأدلة
+                </div>
+                <div class="key-point">
+                    <strong>اكتشاف الأنماط</strong><br>الخفية في datasets
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 3: Stages of Data Analysis -->
+        <div class="slide slide-3" id="slide-3">
+            <div class="stages-container">
+                <div class="stage">
+                    <div class="stage-number">1</div>
+                    <div class="stage-name">جمع البيانات</div>
+                    <div>Data Collection</div>
+                </div>
+                <div class="stage">
+                    <div class="stage-number">2</div>
+                    <div class="stage-name">تنظيف البيانات</div>
+                    <div>Data Cleaning</div>
+                </div>
+                <div class="stage">
+                    <div class="stage-number">3</div>
+                    <div class="stage-name">تنظيم البيانات</div>
+                    <div>Data Organization</div>
+                </div>
+                <div class="stage">
+                    <div class="stage-number">4</div>
+                    <div class="stage-name">تحليل البيانات</div>
+                    <div>Data Analysis</div>
+                </div>
+                <div class="stage">
+                    <div class="stage-number">5</div>
+                    <div class="stage-name">عرض النتائج</div>
+                    <div>Data Visualization</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 4: Types of Data Analysis -->
+        <div class="slide slide-4" id="slide-4">
+            <div class="types-grid">
+                <div class="type-card">
+                    <div class="type-name">التحليل الوصفي</div>
+                    <div class="type-desc">ماذا حدث؟</div>
+                    <div class="type-example">مبيعات الشهر الماضي: 1,200 وحدة</div>
+                </div>
+                <div class="type-card">
+                    <div class="type-name">التشخيصي</div>
+                    <div class="type-desc">لماذا حدث؟</div>
+                    <div class="type-example">انخفاض المبيعات بسبب عطلة</div>
+                </div>
+                <div class="type-card">
+                    <div class="type-name">التنبؤي</div>
+                    <div class="type-desc">ماذا قد يحدث؟</div>
+                    <div class="type-example">تتوقع المبيعات 1,500 وحدة</div>
+                </div>
+                <div class="type-card">
+                    <div class="type-name">التوجيهي</div>
+                    <div class="type-desc">ماذا ينبغي أن نفعل؟</div>
+                    <div class="type-example">زيادة جهود التسويق لرفع المبيعات</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 5: Tools -->
+        <div class="slide slide-5" id="slide-5">
+            <div class="tools-grid">
+                <div class="tool-card">
+                    <div class="tool-name">Microsoft Excel</div>
+                    <div class="tool-desc">أداة جدول بيانات قوية تحلل البيانات باستخدام جداول التجميع، الجداول الرياضية، والرسوم البيانية.</div>
+                </div>
+                <div class="tool-card">
+                    <div class="tool-name">Python</div>
+                    <div class="tool-desc">لغة برمجة مرنة بمكتبات قوية مثل pandas، NumPy، matplotlib لأداء تحليل بيانات معقد.</div>
+                </div>
+                <div class="tool-card">
+                    <div class="tool-name">SQL</div>
+                    <div class="tool-desc">لغة لاستعلام وإدارة قواعد البيانات، لاستخراج البيانات وتنظيفها من قواعد البيانات relational.</div>
+                </div>
+                <div class="tool-card">
+                    <div class="tool-name">Power BI</div>
+                    <div class="tool-desc">أداة تحليل وعرض بصرية من مايكروسوفت تحول البيانات إلى لوحات معلومات تفاعلية.</div>
+                </div>
+                <div class="tool-card">
+                    <div class="tool-name">Tableau</div>
+                    <div class="tool-desc">منصة لعرض البيانات التفاعلية التي تخلق رسومًا بيانيةً ورسوماتٍ تفصيلية بسهولة.</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 6: Practical Example -->
+        <div class="slide slide-6" id="slide-6">
+            <h2>مثال عملي: تحليل مبيعات متجر</h2>
+            <p>مبيعات متجر إلكتروني خلال أربعة أشهر</p>
+            
+            <table class="monthly-sales">
+                <thead>
+                    <tr>
+                        <th>الشهر</th>
+                        <th>المبيعات</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>يناير</td>
+                        <td>800</td>
+                    </tr>
+                    <tr>
+                        <td>فبراير</td>
+                        <td>1,200</td>
+                    </tr>
+                    <tr>
+                        <td>مارس</td>
+                        <td>1,500</td>
+                    </tr>
+                    <tr>
+                        <td>أبريل</td>
+                        <td>1,300</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="chart-container">
+                <div id="bar-chart"></div>
+            </div>
+
+            <div class="conclusion">
+                <strong>الاستنتاج:</strong> يساعد تحليل البيانات في فهم أداء المتجر واتخاذ قرارات مستنيرة. الشهر أبريل حقق أعلى مبيعات بـ 1,300 وحدة، بينما كان الشهر الأدنى في يناير بـ 800 وحدة. تشير البيانات إلى فرصة للتحسين في الشهور القادمة من خلال حملات تسويقية مستهدفة.
+            </div>
+        </div>
+
+        <!-- Slide 7: Conclusion -->
+        <div class="slide slide-7" id="slide-7">
+            <div class="quote">البيانات لا تتحدث وحدها، بل تحتاج إلى من يفهمها ويحولها إلى قرارات.</div>
+            <div class="thank-you">THANK YOU</div>
+        </div>
+    </div>
+
+    <!-- Navigation Buttons -->
+    <button class="nav-btn prev" onclick="prevSlide()">←</button>
+    <button class="nav-btn next" onclick="nextSlide()">→</button>
+    <button class="nav-btn fullscreen" onclick="toggleFullscreen()">⛶</button>
+
+    <!-- Slide Indicator -->
+    <div class="slide-indicator" id="slide-indicator"></div>
+
+    <!-- Progress Bar -->
+    <div class="progress-bar" id="progress-bar"></div>
+
+    <!-- Keyboard Hint -->
+    <div class="keyboard-hint" id="keyboard-hint">
+        أسهم ← → للتنقل
+    </div>
+
+    <script>
+        // Slide state
+        let currentSlide = 1;
+        const totalSlides = 7;
+
+        // Slide data for indicator
+        const slideTitles = [
+            'الغلاف - DATA ANALYSIS',
+            'ما هو تحليل البيانات؟',
+            'مراحل تحليل البيانات',
+            'أنواع تحليل البيانات',
+            'أدوات تحليل البيانات',
+            'مثال عملي لتحليل البيانات',
+            'الخاتمة والمستقبل'
+        ];
+
+        // Initialize presentation
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set up slide indicator
+            const indicator = document.getElementById('slide-indicator');
+            for (let i = 0; i < totalSlides; i++) {
+                const dot = document.createElement('div');
+                dot.className = 'dot' + (i === 0 ? ' active' : '');
+                dot.onclick = () => goToSlide(i + 1);
+                indicator.appendChild(dot);
+            }
+
+            // Set up progress bar
+            updateProgressBar();
+
+            // Animate slide 6 chart
+            setTimeout(animateChart, 500);
+
+            // Update initial slide
+            showSlide(1);
+        });
+
+        // Show slide function
+        function showSlide(n) {
+            if (n > totalSlides) n = 1;
+            if (n < 1) n = totalSlides;
+
+            currentSlide = n;
+
+            // Hide all slides
+            const slides = document.querySelectorAll('.slide');
+            slides.forEach(slide => {
+                slide.classList.remove('active');
+            });
+
+            // Show current slide
+            const activeSlide = document.getElementById('slide-' + n);
+            if (activeSlide) {
+                activeSlide.classList.add('active');
+            }
+
+            // Update indicator dots
+            const dots = document.querySelectorAll('.dot');
+            dots.forEach((dot, index) => {
+                dot.classList.toggle('active', index + 1 === n);
+            });
+
+            // Update progress bar
+            updateProgressBar();
+
+            // Animate chart when entering slide 6
+            if (n === 6) {
+                setTimeout(animateChart, 300);
+            }
+
+            // Update keyboard hint visibility
+            const hint = document.getElementById('keyboard-hint');
+            hint.style.opacity = '1';
+        }
+
+        function nextSlide() {
+            showSlide(currentSlide + 1);
+        }
+
+        function prevSlide() {
+            showSlide(currentSlide - 1);
+        }
+
+        function goToSlide(n) {
+            showSlide(n);
+        }
+
+        function updateProgressBar() {
+            const progress = (currentSlide / totalSlides) * 100;
+            const progressBar = document.getElementById('progress-bar');
+            if (progressBar) {
+                progressBar.style.width = progress + '%';
+            }
+        }
+
+        function toggleFullscreen() {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen();
+            } else {
+                document.exitFullscreen();
+            }
+        }
+
+        // Chart animation for slide 6
+        function animateChart() {
+            const chartContainer = document.getElementById('bar-chart');
+            if (!chartContainer) return;
+
+            const months = ['يناير', 'فبراير', 'مارس', 'أبريل'];
+            const sales = [800, 1200, 1500, 1300];
+            const maxSales = Math.max(...sales);
+            
+            chartContainer.innerHTML = '';
+
+            const table = document.createElement('table');
+            table.className = 'monthly-sales';
+
+            const thead = document.createElement('thead');
+            thead.innerHTML = '<tr><th>الشهر</th><th>المبيعات</th></tr>';
+            table.appendChild(thead);
+
+            const tbody = document.createElement('tbody');
+
+            months.forEach((month, index) => {
+                const tr = document.createElement('tr');
+                
+                const monthTd = document.createElement('td');
+                monthTd.textContent = month;
+                tr.appendChild(monthTd);
+
+                const salesTd = document.createElement('td');
+                salesTd.textContent = sales[index];
+                tr.appendChild(salesTd);
+
+                // Create bar
+                const barContainer = document.createElement('div');
+                barContainer.className = 'sales-bar' + (sales[index] === maxSales ? ' highlight' : '');
+                
+                const barLabel = document.createElement('span');
+                barLabel.className = 'bar-label';
+                barLabel.textContent = sales[index];
+                
+                const barValue = document.createElement('span');
+                barValue.className = 'bar-value';
+                barValue.textContent = sales[index];
+                
+                barContainer.appendChild(barLabel);
+                barContainer.appendChild(barValue);
+                
+                // Set bar width proportional to sales
+                const widthPercent = (sales[index] / maxSales) * 100;
+                barContainer.style.width = widthPercent + '%';
+
+                salesTd.appendChild(barContainer);
+                tr.appendChild(salesTd);
+                tbody.appendChild(tr);
+            });
+
+            table.appendChild(tbody);
+            chartContainer.appendChild(table);
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'ArrowRight') {
+                nextSlide();
+            } else if (e.key === 'ArrowLeft') {
+                prevSlide();
+            }
+        });
+    </script>
+</body>
+</html>
